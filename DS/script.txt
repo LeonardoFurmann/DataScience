@@ -1,0 +1,26 @@
+use northwind;
+insert into muldim_1.fact_vendas(
+tf_produto, tf_catProduto, tf_cliente, tf_vendedor,
+tf_regiao,tf_municipio,tf_uf,quantidade, valor)
+select 
+    muldim_1.dim_produto.tf_produto,
+	muldim_1.dim_catproduto.tf_catProduto,
+    muldim_1.dim_cliente.tf_cliente,
+    muldim_1.dim_vendedor.tf_vendedor,
+    muldim_1.dim_regiao.tf_regiao,
+    muldim_1.dim_municipio.tf_municipio,   
+    muldim_1.dim_uf.tf_UF,
+    order_details.quantity,
+    order_details.quantity * order_details.unit_price as valor
+ from order_details
+inner join orders on orders.id = order_details.order_id
+inner join customers on orders.customer_id = customers.id
+inner join products on order_details.product_id = products.id
+inner join employees on orders.employee_id = employees.id
+join muldim_1.dim_produto  on  products.product_name =  muldim_1.dim_produto.produto
+join muldim_1.dim_cliente on concat(customers.first_name, '  ', customers.last_name) = muldim_1.dim_cliente.nome
+join muldim_1.dim_vendedor on concat(employees.first_name, '  ', employees.last_name) = muldim_1.dim_vendedor.nome
+join muldim_1.dim_regiao on customers.country_region = muldim_1.dim_regiao.regiao
+join muldim_1.dim_municipio on customers.city = muldim_1.dim_municipio.municipio
+join muldim_1.dim_catproduto on products.category = muldim_1.dim_catproduto.catProduto
+join muldim_1.dim_uf on customers.state_province = muldim_1.dim_uf.UF
