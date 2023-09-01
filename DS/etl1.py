@@ -24,7 +24,7 @@ cursor = connection.cursor()
 cursor_multdim = conn_multdim.cursor()
 
 # carregamento de dados na multidimensional produtos
-# select_statement = 'select product_name from products'
+# select_statement = 'select distinct product_name from products'
 # cursor.execute(select_statement)
 # result = cursor.fetchall()
 # prod_df = pd.DataFrame(result, columns=['product_name'])
@@ -76,21 +76,21 @@ cursor_multdim = conn_multdim.cursor()
 #     cursor_multdim.execute(insert_statement)
 #     conn_multdim.commit()
 
-select_statement = 'select distinct category from products'
-cursor.execute(select_statement)
-result = cursor.fetchall()
-prod_df = pd.DataFrame(result, columns=['category'])
-for i,r in prod_df.iterrows():
-    insert_statement = f"insert into dim_catproduto values({i+1}, '{r['category']}')"
-    cursor_multdim.execute(insert_statement)
-    conn_multdim.commit()
-
-# select_statement = 'select distinct state_province from customers'
+# select_statement = 'select distinct category from products'
 # cursor.execute(select_statement)
 # result = cursor.fetchall()
-# prod_df = pd.DataFrame(result, columns=['state_province'])
+# prod_df = pd.DataFrame(result, columns=['category'])
 # for i,r in prod_df.iterrows():
-#     insert_statement = f"insert into dim_uf values({i+1}, '{r['state_province']}')"
+#     insert_statement = f"insert into dim_catproduto values({i+1}, '{r['category']}')"
 #     cursor_multdim.execute(insert_statement)
 #     conn_multdim.commit()
+
+select_statement = 'select distinct state_province from customers'
+cursor.execute(select_statement)
+result = cursor.fetchall()
+prod_df = pd.DataFrame(result, columns=['state_province'])
+for i,r in prod_df.iterrows():
+    insert_statement = f"insert into dim_uf values({i+1}, '{r['state_province']}')"
+    cursor_multdim.execute(insert_statement)
+    conn_multdim.commit()
 
